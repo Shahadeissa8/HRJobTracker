@@ -73,6 +73,7 @@ namespace HRJobTracker.Controllers
             var pendingApplicants = _context.Applicantions
                 .Where(a => a.Status == "Pending")
                 .ToList();
+            Console.WriteLine("📡 Request received for pending applications.");
             return Ok(pendingApplicants);
         }
         //show approved applications
