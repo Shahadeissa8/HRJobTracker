@@ -73,8 +73,38 @@ namespace HRJobTracker.Controllers
             var pendingApplicants = _context.Applicantions
                 .Where(a => a.Status == "Pending")
                 .ToList();
+
+            var jobs = _context.Jobs.ToList();
+
+            var pending = pendingApplicants.Join(jobs, job => job.JobId, pendingApplicants => pendingApplicants.JobId, (pendingApplicants, jobs) => new
+            {
+                jobCategory = jobs.Category,
+                applicationId = pendingApplicants.ApplicationId,
+                applicantName = pendingApplicants.ApplicantName,
+                applicantImage = pendingApplicants.ApplicantImage,
+                applicantCVUrl = pendingApplicants.ApplicantCVUrl,
+                applicantMajor = pendingApplicants.ApplicantMajor,
+                applicantSkills = pendingApplicants.ApplicantSkills,
+                applicantDOB = pendingApplicants.ApplicantDOB,
+                status = pendingApplicants.Status,
+                email = pendingApplicants.Email,
+                phoneNumber  = pendingApplicants.PhoneNumber,
+                jobId = pendingApplicants.JobId
+
+                //"applicantName": "Harry Sasquatch",
+                //"applicantImage": "https://static.wikia.nocookie.net/harrypotter/images/c/ce/Harry_Potter_DHF1.jpg/revision/latest/thumbnail/width/360/height/360?cb=20140603201724",
+                //"applicantCVUrl": "https://career.oregonstate.edu/sites/career.oregonstate.edu/files/2024-09/environmental_sciences_cv.pdf",
+                //"applicantMajor": "Ph.D. in Environmental Sciences",
+                //"applicantSkills": "Working knowledge of ArcMap for GIS analysis, Web development experience, including knowledge of HTML, CSS, and JavaScript",
+                //"applicantDOB": "1979-09-07T00:00:00",
+                //"status": "Pending",
+                //"email": "HarrySasquatch@yahoo.com",
+                //"phoneNumber": 60006600,
+            });
+
+
             Console.WriteLine("📡 Request received for pending applications.");
-            return Ok(pendingApplicants);
+            return Ok(pending);
         }
         //show approved applications
         [HttpGet("approved")]
